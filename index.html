@@ -7,10 +7,11 @@
     <style>
         body {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background-color: #000;
+            background-color: #00008B; /* 纯色醒目背景 */
             margin: 0;
             overflow: hidden;
         }
@@ -19,6 +20,7 @@
             position: relative;
             width: 300px;
             height: 300px;
+            margin-bottom: 30px;
         }
 
         .light {
@@ -37,6 +39,25 @@
         .light:nth-child(5) { background-color: cyan; }
         .light:nth-child(6) { background-color: blue; }
         .light:nth-child(7) { background-color: purple; }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #f0f0f0;
+        }
     </style>
 </head>
 <body>
@@ -50,9 +71,16 @@
         <div class="light"></div>
     </div>
 
+    <div class="controls">
+        <button id="startBtn">开始动画</button>
+        <button id="stopBtn">停止动画</button>
+    </div>
+
     <script>
         // 获取所有灯元素
         const lights = document.querySelectorAll('.light');
+        const startBtn = document.getElementById('startBtn');
+        const stopBtn = document.getElementById('stopBtn');
 
         // 颜色列表
         const colors = [
@@ -61,6 +89,7 @@
 
         // 定义颜色索引，用于循环设置灯光颜色
         let colorIndex = [6, 5, 4, 3, 2, 1, 0]; // 初始颜色索引（反向）
+        let animationInterval; // 用于存储定时器的引用
 
         // 设置圆形排列
         const radius = 100; // 圆形排列的半径
@@ -77,8 +106,8 @@
             light.style.top = `${y}px`;
         });
 
-        // 设置定时器，改变灯光颜色
-        setInterval(() => {
+        // 动画函数
+        function animateLights() {
             // 更新颜色索引
             for (let i = 0; i < lights.length; i++) {
                 // 每个灯的颜色索引减1，当索引小于0时，循环回到颜色数组的最后一位
@@ -87,7 +116,22 @@
                 lights[i].style.backgroundColor = colors[colorIndex[i]];
                 lights[i].style.boxShadow = `0 0 20px ${colors[colorIndex[i]]}`;
             }
-        }, 1000); // 每1秒变化一次颜色，可以根据需要调整这个时间间隔
+        }
+
+        // 开始动画
+        startBtn.addEventListener('click', () => {
+            if (!animationInterval) {
+                animationInterval = setInterval(animateLights, 1000);
+            }
+        });
+
+        // 停止动画
+        stopBtn.addEventListener('click', () => {
+            if (animationInterval) {
+                clearInterval(animationInterval);
+                animationInterval = null;
+            }
+        });
     </script>
 </body>
 </html>
