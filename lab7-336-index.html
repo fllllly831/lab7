@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>七彩霓虹灯</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #000;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+
+        .light {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            transition: background-color 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        /* 初始颜色设置 */
+        .light:nth-child(1) { background-color: red; }
+        .light:nth-child(2) { background-color: orange; }
+        .light:nth-child(3) { background-color: yellow; }
+        .light:nth-child(4) { background-color: green; }
+        .light:nth-child(5) { background-color: cyan; }
+        .light:nth-child(6) { background-color: blue; }
+        .light:nth-child(7) { background-color: purple; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="light"></div>
+        <div class="light"></div>
+        <div class="light"></div>
+        <div class="light"></div>
+        <div class="light"></div>
+        <div class="light"></div>
+        <div class="light"></div>
+    </div>
+
+    <script>
+        // 获取所有灯元素
+        const lights = document.querySelectorAll('.light');
+
+        // 颜色列表
+        const colors = [
+            'red', 'orange', 'yellow', 'green', 'cyan', 'blue', 'purple'
+        ];
+
+        // 定义颜色索引，用于循环设置灯光颜色
+        let colorIndex = [6, 5, 4, 3, 2, 1, 0]; // 初始颜色索引（反向）
+
+        // 设置圆形排列
+        const radius = 100; // 圆形排列的半径
+        const centerX = 150; // 容器中心X坐标
+        const centerY = 150; // 容器中心Y坐标
+
+        // 计算每个灯的位置
+        lights.forEach((light, index) => {
+            const angle = (index / lights.length) * 2 * Math.PI;
+            const x = centerX + radius * Math.cos(angle) - 25; // 25是灯的半径
+            const y = centerY + radius * Math.sin(angle) - 25; // 25是灯的半径
+
+            light.style.left = `${x}px`;
+            light.style.top = `${y}px`;
+        });
+
+        // 设置定时器，改变灯光颜色
+        setInterval(() => {
+            // 更新颜色索引
+            for (let i = 0; i < lights.length; i++) {
+                // 每个灯的颜色索引减1，当索引小于0时，循环回到颜色数组的最后一位
+                colorIndex[i] = (colorIndex[i] - 1 + colors.length) % colors.length;
+                // 设置灯光颜色
+                lights[i].style.backgroundColor = colors[colorIndex[i]];
+                lights[i].style.boxShadow = `0 0 20px ${colors[colorIndex[i]]}`;
+            }
+        }, 1000); // 每1秒变化一次颜色，可以根据需要调整这个时间间隔
+    </script>
+</body>
+</html>
